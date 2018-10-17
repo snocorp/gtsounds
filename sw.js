@@ -8,6 +8,7 @@ self.addEventListener('install', function(event) {
       return cache.addAll(
         [
           '/manifest.webmanifest',
+          '/audio.aac',
           '/audio.ogg',
           '/index.html',
           '/'

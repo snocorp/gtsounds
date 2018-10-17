@@ -6,7 +6,10 @@
     <link rel="manifest" href="/manifest.webmanifest">
   </head>
   <body>
-    <audio src="audio.ogg" controls></audio>
+    <audio controls>
+      <source type="audio/ogg" src="audio.ogg"/>
+      <source type="audio/aac" src="audio.aac"/>
+    </audio>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
