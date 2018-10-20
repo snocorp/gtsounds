@@ -4,12 +4,79 @@
     <title>Garbage Truck Noises</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <link rel="manifest" href="/manifest.webmanifest">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .garbage-truck {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+    </style>
   </head>
   <body>
-    <audio controls preload="auto">
+    <audio id="gtaudio" preload="auto" loop>
       <source type="audio/ogg" src="audio.ogg"/>
       <source type="audio/aac" src="audio.aac"/>
     </audio>
+    <svg x="0px" y="0px" viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg" class="garbage-truck" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <g>
+        <rect x="0" y="69" width="120" height="45" fill="#666"/>
+        <g id="road_dashes">
+          <rect x="-30" y="89" width="10" height="4" fill="#e4e41e"/>
+          <rect x="0" y="89" width="10" height="4" fill="#e4e41e"/>
+          <rect x="30" y="89" width="10" height="4" fill="#e4e41e"/>
+          <rect x="60" y="89" width="10" height="4" fill="#e4e41e"/>
+          <rect x="90" y="89" width="10" height="4" fill="#e4e41e"/>
+        </g>
+        <!-- hide the dashes outside the road -->
+        <rect x="-120" y="69" width="120" height="45" fill="#fff"/>
+        <rect x="120" y="69" width="120" height="45" fill="#fff"/>
+      </g>
+      <g onclick="toggleSound()" transform="translate(10, 0)">
+        <!-- chassis -->
+        <g>
+            <rect x="10" y="69" width="75" height="10" stroke="black" fill="#808080" stroke-width="1"/>
+        </g>
+        <!-- front wheel -->
+        <g>
+          <circle cx="20" cy="78" r="8" stroke="transparent" fill="black" stroke-width="1"/>
+          <circle cx="20" cy="78" r="4" stroke="transparent" fill="#ccc" stroke-width="1"/>
+        </g>
+        <!-- back wheel -->
+        <g>
+          <circle cx="75" cy="78" r="8" stroke="transparent" fill="black" stroke-width="1"/>
+          <circle cx="75" cy="78" r="4" stroke="transparent" fill="#ccc" stroke-width="1"/>
+        </g>
+        <!-- cab -->
+        <polygon points="10.5 80 6 80 6 59 9 46 30 46 30 69 13 69" stroke="black" fill="#f0f0f0" stroke-width="1"/>
+        <!-- windshield -->
+        <g>
+          <polygon points="5.7 58 8 48 11 48 11 58" fill="#aed5da" />
+          <polyline points="8 48 11 48 11 58 5.7 58" stroke="black" fill="transparent" stroke-width="0.5"/>
+        </g>
+        <!-- turn signal -->
+        <rect x="8" y="69" rx="1" ry="1" width="3" height="2" fill="#debf58" stroke="black" stroke-width="0.25" />
+        <!-- door -->
+        <g>
+          <polygon points="13 67 13 48 28 48 28 67" stroke="black" fill="#f0f0f0" stroke-width="0.5"/>
+          <rect x="13" y="48" width="15" height="10" stroke="black" fill="#aed5da" stroke-width="0.5"/>
+        </g>
+        <!-- box -->
+        <polygon points="30 69 30 40 75 40 85 69" stroke="black" fill="green" stroke-width="1"/>
+        <!-- garbage door -->
+        <path d="M 75 40 C 95 45, 105 70, 100 80 L 85 80 L 85 69" stroke="black" fill="green" stroke-width="1"/>
+      </g>
+      <rect onclick="goSlow()" x="49" y="0" width="10" height="10" fill="yellow"/>
+      <rect onclick="goFast()" x="61" y="0" width="10" height="10" fill="green"/>
+      <animateMotion id="dash_animator" xlink:href="#road_dashes" dur="3s" repeatCount="indefinite" fill="freeze" path="M 0 0 H 30" />
+    </svg>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -21,6 +88,23 @@
             console.error('Service Worker Error', err);
           });
         });
+      }
+
+      function toggleSound() {
+        const elem = document.getElementById('gtaudio');
+        if (elem.paused) {
+          elem.play()
+        } else {
+          elem.pause()
+        }
+      }
+
+      function goSlow() {
+        document.getElementById('dash_animator').setAttribute('dur', '3s');
+      }
+
+      function goFast() {
+        document.getElementById('dash_animator').setAttribute('dur', '1s');
       }
     </script>
   </body>
